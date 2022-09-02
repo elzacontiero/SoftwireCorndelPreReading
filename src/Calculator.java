@@ -1,53 +1,45 @@
 import java.util.Scanner;
-import java.util.Random;
 public class Calculator {
 
     /**
      * The method below gives 3 chances to the user to enter the right number.
-     * @param s Scanner instance to provide us with input.
      * @return integer collected from the user.
      */
-    public static int safeIntCollect(String message, Scanner s) {
-        int i;
-        // initialise n1
-        int n1=0;
+    public static int safeIntCollect() {
+        // Create a scanner instance to collect ints.
+        Scanner s = new Scanner(System.in);
         // loop 3 times
-        for(i =0; i<=2; i++) {
-            // makes an attempt to collect the next integer from the user
+        for(int i =0; i<=2; i++) {
+            // makes an attempt to collect the next integer from the user.
             try {
-                System.out.print(message);
-                n1 = s.nextInt(); // this might throw an exception
-                // if nextInt() above doesn't throw an Exception, everything is fine, so break the loop.
-                break;
+                return s.nextInt(); // this might throw an exception!
+                // if nextInt() above doesn't throw an Exception, everything is fine, so return the number.
             }
             catch(Exception e) {
                 // If nextInt() throws an exception, ask the user to try again.
                 System.out.println("sorry, invalid input. Try again!");
-                // we have to remove the character from the input,
-                // otherwise nextInt() will fail again immediately on next attempt
+                // If the person entered a letter, that remains in the buffer to be collected.
+                // Subsequent calls to nextInt will throw an exception on it, so we have to
+                // empty the buffer before tying again.
                 s.nextLine();
             }
-
         }
-        if (i>2){
-
-            throw new RuntimeException("You have exceeded the number of attempts");
-        }
-        return n1;
+        throw new RuntimeException("You have exceeded the number of attempts");
     }
-
 
     public static void main(String[] args) {
         System.out.println("Welcome to the Calculator!");
 
-        Random random = new Random();
         Scanner scan = new Scanner(System.in);
 
+        // Initialise boolean to true as we want to keep looping until user decides to quit ('q').
         boolean keepRunning = true;
         while(keepRunning) {
 
-            int n1 = safeIntCollect("Please enter first number: ", scan);
-            int n2 =  safeIntCollect("Please enter second number: ", scan);
+            System.out.println("Please enter first number: ");
+            int n1 = safeIntCollect();
+            System.out.println("Please enter second number: ");
+            int n2 =  safeIntCollect();
             int result = 0;
 
             System.out.println("The two numbers are: " + n1 + " and " + n2);
@@ -69,11 +61,15 @@ public class Calculator {
                     break;
                 case "q":
                     keepRunning = false;
-                    break;
-                default:
+                    break; // This breaks the switch, not the loop. That's why I make keepRunning=false
+                default: // if the user entered something not covered in the options above, inform the message below.
                     System.out.println("Sorry, we don't support this operation.");
             } // <-- break jumps here
-            System.out.println("Result: " + result);
+
+            if (!operation.equals("q") ) {
+                // If the operation is not 'q' (quit), print result.
+                System.out.println("Result: " + result);
+            }
         }
     }
 }
