@@ -51,13 +51,16 @@ public class Calculator {
 
             switch (operation) {
                 case "+":
-                    result = n1 + n2;
+                    Add a = new Add (); // creating an instance of ADD
+                    result = a.calculate(n1,n2); // result is equal to calculation performed by object a
                     break;
                 case "-":
-                    result = n1 - n2;
+                    Subtraction s = new Subtraction();
+                    result = s.calculate(n1,n2);
                     break;
                 case "*":
-                    result = n1 * n2;
+                    Multiply m = new Multiply();
+                    result = m.calculate(n1,n2);
                     break;
                 case "q":
                     keepRunning = false;
