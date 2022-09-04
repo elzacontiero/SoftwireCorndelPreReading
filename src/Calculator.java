@@ -27,6 +27,8 @@ public class Calculator {
     }
 
     public static void main(String[] args) {
+
+        Scanner scan = new Scanner(System.in); // Scanner class to collect input from user.
         // Adding a HashMap containing all available calculations. The idea is to map user's selection of operators
         // into instances of calculations.
 
@@ -38,40 +40,45 @@ public class Calculator {
         operations.put("*", new Multiply());
 
         System.out.println("Welcome to the Calculator!");
+        System.out.println("========================= ");
 
-        Scanner scan = new Scanner(System.in); // Scanner class allows to collect input from user.
+        while(true) {
 
-        // Initialise boolean to true as I want to keep looping until user decides to quit ('q').
-        boolean keepRunning = true;
-        while(keepRunning) {
-
-            System.out.println("Please enter first number: ");
-            int n1 = safeIntCollect(); // this method gives the user 3 chances to enter a number.
-            System.out.println("Please enter second number: ");
-            int n2 =  safeIntCollect();
-            int result = 0; // initialise result of calculation to be used later.
-
-            System.out.println("The two numbers are: " + n1 + " and " + n2);
-
-            // Use scan to collect the operator from user.
-            System.out.print("Please, enter the operator: ");
+            System.out.print(" Choose an operator: ");
             String operator = scan.next();
             // If the operator is 'q' (quit),quit
             if (operator.equals("q") ) {
                 System.out.println("Good-bye. Have a nice day!");
                 break;
             }
-
-            // 'operations' is a HashMap associating '+','-','*' to their Calculation instances.
+            // 'operations' below is a HashMap associating '+','-','*' to their Calculation instances.
             // Get the corresponding calculation given the 'operator' that user input.
             Calculation calc = operations.get(operator);
 
             if (calc==null) {
-                System.out.println("invalid operation.Try again! ");
-                continue;
+                System.out.println("invalid operation!");
+                break;
             }
-            // result is assigned with the outcome of calculate method from object calc.
-            result = calc.calculate(n1,n2);
+
+            System.out.print("How many numbers do you want to use?: ");
+            int n=0;
+            n = scan.nextInt(); // collect n from user and save in variable n.
+            if (n==0){
+                System.out.println("Invalid amount of numbers.");
+                break;
+            }
+            int[] numbers = new int[n]; // in java, arrays are fixed size.
+            // then loop over this array asking the user to enter the numbers
+            for (int i=0; i< numbers.length;i++) {
+                // while looping over numbers message the user to enter number i+1
+                System.out.print("Enter number " + (i+1) + ": " );
+                // store this number into position i of Array numbers.
+                numbers[i] = scan.nextInt();
+            }
+
+            int result = 0; // initialise result of calculation to be used later.
+            result = calc.calculate(numbers);
+
             System.out.println("Result: " + result);
         }
     }
