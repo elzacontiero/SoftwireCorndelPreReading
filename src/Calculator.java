@@ -1,5 +1,7 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.HashMap;
+import java.util.List;
 public class Calculator {
     /**
      * The method below gives 3 chances to the user to enter the right number.
@@ -29,11 +31,12 @@ public class Calculator {
     public static void main(String[] args) {
 
         Scanner scan = new Scanner(System.in); // Scanner class to collect input from user.
+
         // I am adding a HashMap containing all available calculations.
         // The idea is to map user's selection of operators into instances of calculations.
         // This avoids the need of a switch statement that would otherwise grow as we add more operations.
-
         // HashMap will associate the String Key operator to Calculation Interface.(Value)
+
         HashMap<String, Calculation> operations = new HashMap<>();
         // I associate the operator with a new instance of calculations.
         operations.put("+", new Add());
@@ -61,20 +64,13 @@ public class Calculator {
                 break;
             }
 
-            System.out.print("How many numbers do you want to use?: ");
-            int n=0;
-            n = scan.nextInt(); // collect n from user and save in variable n.
-            if (n==0){
-                System.out.println("Invalid amount of numbers.");
-                break;
-            }
-            int[] numbers = new int[n]; // in java, arrays are fixed size.
-            // then loop over this array asking the user to enter the numbers
-            for (int i=0; i< numbers.length;i++) {
-                // while looping over numbers message the user to enter number i+1
-                System.out.print("Enter number " + (i+1) + ": " );
-                // store this number into position i of Array numbers.
-                numbers[i] = scan.nextInt();
+            // choosing numbers
+            System.out.print("Enter a number: ");
+            List<Integer> numbers = new ArrayList<>();
+
+            while(scan.hasNextInt()) {
+                numbers.add(scan.nextInt());
+                System.out.print("Enter another number or type 'quit': " );
             }
 
             int result = 0; // initialise result of calculation to be used later.
