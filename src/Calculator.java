@@ -18,9 +18,8 @@ public class Calculator {
             catch(Exception e) {
                 // If nextInt() throws an exception, ask the user to try again.
                 System.out.println("sorry, invalid input. Try again!");
-                // If the person entered a letter, that remains in the buffer to be collected.
-                // Subsequent calls to nextInt will throw an exception on it, so we have to
-                // empty the buffer before tying again.
+                // If the user entered a letter, that remains in the buffer to be collected.
+                // Subsequent calls to nextInt will throw an exception, so empty the buffer before tying again.
                 s.nextLine();
             }
         }
@@ -31,31 +30,30 @@ public class Calculator {
         // Adding a HashMap containing all available calculations. The idea is to map user's selection of operators
         // into instances of calculations.
 
-        // HashMap will map String (Key) to Calculation Interface.(Value)
+        // HashMap will associate the String Key operator to Calculation Interface.(Value)
         HashMap<String, Calculation> operations = new HashMap<>();
-        // I associate the operator with the new instance Add that I'm creating.
-        // Add implements Calculation, therefore, it is expected.(Principle of Polymorphism)
+        // I associate the operator with a new instance of calculations.
         operations.put("+", new Add());
         operations.put("-", new Subtraction());
         operations.put("*", new Multiply());
 
         System.out.println("Welcome to the Calculator!");
 
-        Scanner scan = new Scanner(System.in);
+        Scanner scan = new Scanner(System.in); // Scanner class allows to collect input from user.
 
-        // Initialise boolean to true as we want to keep looping until user decides to quit ('q').
+        // Initialise boolean to true as I want to keep looping until user decides to quit ('q').
         boolean keepRunning = true;
         while(keepRunning) {
 
             System.out.println("Please enter first number: ");
-            int n1 = safeIntCollect();
+            int n1 = safeIntCollect(); // this method gives the user 3 chances to enter a number.
             System.out.println("Please enter second number: ");
             int n2 =  safeIntCollect();
-            int result = 0;
+            int result = 0; // initialise result of calculation to be used later.
 
             System.out.println("The two numbers are: " + n1 + " and " + n2);
 
-            // Create a scanner and collect the operator from the user:
+            // Use scan to collect the operator from user.
             System.out.print("Please, enter the operator: ");
             String operator = scan.next();
             // If the operator is 'q' (quit),quit
@@ -64,7 +62,8 @@ public class Calculator {
                 break;
             }
 
-            // Create variable calc of type Calculation and from HashMap operations get the value corresponding to key operator.
+            // 'operations' is a HashMap associating '+','-','*' to their Calculation instances.
+            // Get the corresponding calculation given the 'operator' that user input.
             Calculation calc = operations.get(operator);
 
             if (calc==null) {
