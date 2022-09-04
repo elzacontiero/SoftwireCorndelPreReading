@@ -1,9 +1,12 @@
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.HashMap;
 import java.util.List;
 import java.io.File;
+import java.io.IOException;
 public class Calculator {
+    private static final String LOG_FILE = "calculator.log";
 
     public static void main(String[] args) throws Exception {
 
@@ -58,7 +61,14 @@ public class Calculator {
             int result = calc.calculate(numbers);
 
             System.out.println("Result: " + result);
+            logResult(result);
         }
+    }
+
+    private static void logResult(int result) throws IOException{
+        FileWriter writer = new FileWriter(LOG_FILE, true);
+        writer.write("Calculated result:" + result + "\n");
+        writer.close();
     }
 }
 
