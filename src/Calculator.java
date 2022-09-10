@@ -47,8 +47,10 @@ public class Calculator {
             // Read numbers from file. User will tell which file to read from.
             System.out.print("Enter a file: ");
             String fileName = scan.nextLine();
-            // create Scanner to read numbers from fileName.
-            Scanner fileScanner = new Scanner(new File(fileName));
+            // First, create a File object pointing to the actual file in the filesystem: 'input.txt', for example.
+            File fileInstance = new File(fileName);
+            // then create Scanner to read numbers from that fileName.
+            Scanner fileScanner = new Scanner(fileInstance);
 
             // Create an ArrayList of Integers to store user's numbers.
             List<Integer> numbers = new ArrayList<>();
