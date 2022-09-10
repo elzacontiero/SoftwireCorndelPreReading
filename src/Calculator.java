@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -6,58 +7,67 @@ import java.util.List;
 import java.io.File;
 import java.io.IOException;
 public class Calculator {
-    private static final String LOG_FILE = "calculator.log";
+    static Scanner scan = new Scanner(System.in);
 
-    public static void main(String[] args) throws Exception {
+    static Calculation gettingCalculationsFromUsers() throws Exception {
 
-        Scanner scan = new Scanner(System.in); // Scanner class to collect input from user.
-
-        // I am adding a HashMap containing all available calculations.
-        // The idea is to map user's selection of operators into instances of calculations.
-        // This avoids the need of a switch statement that would otherwise grow as we add more operations.
-        // HashMap will associate the String Key operator to Calculation Interface.(Value)
+        System.out.print(" Choose an operator: ");
+        String operator = scan.nextLine();
 
         HashMap<String, Calculation> operations = new HashMap<>();
-        // I associate the operator with a new instance of calculations.
         operations.put("+", new Add());
         operations.put("-", new Subtraction());
         operations.put("*", new Multiply());
 
+        Calculation calc = operations.get(operator);
+        if(calc== null){
+            throw new Exception("Sorry, Invalid operator!");
+        }
+        return calc;
+    }
+
+    static public List<Integer> readNumbersFromFile() throws FileNotFoundException {
+        System.out.print("Enter a file: ");
+        String fileName = scan.nextLine();
+
+        File fileInstance = new File(fileName);
+
+        Scanner fileScanner = new Scanner(fileInstance);
+
+        List<Integer> numbers = new ArrayList<>();
+
+        while(fileScanner.hasNextInt()) {
+            numbers.add(fileScanner.nextInt());
+        }
+        return numbers;
+    }
+
+    private static final String LOG_FILE = "calculator.log";
+
+    public static void main(String[] args) throws Exception {
+
         System.out.println("Welcome to the Calculator!");
         System.out.println("========================= ");
 
+
         while(true) {
 
-            System.out.print(" Choose an operator: ");
-            String operator = scan.nextLine();
-            // If the operator is 'q' (quit),quit
-            if (operator.equals("q") ) {
-                System.out.println("Good-bye. Have a nice day!");
-                break;
+            Calculation calc;
+            try {
+                calc = gettingCalculationsFromUsers();
             }
-            // 'operations' below is a HashMap associating '+','-','*' to their Calculation objects.
-            // Get the corresponding calculation given the 'operator' that user inputs.
-            Calculation calc = operations.get(operator);
-
-            if (calc==null) {
-                System.out.println("invalid operation!");
-                break;
+            catch (Exception e) {
+                System.out.println(e.getMessage());
+                continue;
             }
 
-            // Read numbers from file. User will tell which file to read from.
-            System.out.print("Enter a file: ");
-            String fileName = scan.nextLine();
-            // First, create a File object pointing to the actual file in the filesystem: 'input.txt', for example.
-            File fileInstance = new File(fileName);
-            // then create Scanner to read numbers from that fileName.
-            Scanner fileScanner = new Scanner(fileInstance);
-
-            // Create an ArrayList of Integers to store user's numbers.
-            List<Integer> numbers = new ArrayList<>();
-
-            // Keep reading from fileScanner if there is a next integer available.
-            while(fileScanner.hasNextInt()) {
-                numbers.add(fileScanner.nextInt());
+            List<Integer> numbers;
+            try {
+                numbers = readNumbersFromFile();
+            }
+            catch (FileNotFoundException e) {
+                System.out.println("File not found.");
+                continue; // the loop
             }
 
             int result = calc.calculate(numbers);
